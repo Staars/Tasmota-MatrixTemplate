@@ -15,8 +15,8 @@ class LongTextScreen: BaseScreen
         self.screenManager.changeCounter = 30
 
         self.textPosition = 0
-        #self.text = "THIS IS A VERY LONG TEXT MESSAGE, THAT WOULD NEVER FIT ON THE SCREEN OF A ULANZI CLOCK !  "
-        self.text = tasmota.cmd("status 4").tostring()
+        self.text = " THIS IS A VERY LONG TEXT MESSAGE, THAT WOULD NEVER FIT ON THE SCREEN OF A ULANZI CLOCK !  "
+        # self.text = tasmota.cmd("status 4").tostring()
         self.needs_render = true
         self.trashOutBuf = bytes(-(3 * 8)) # height * RGB
     end

@@ -41,7 +41,7 @@ class ClockfaceManager
         self.matrixController = MatrixController(matrix_width,8,32)
         self.offscreenController = MatrixController(matrix_width,8,1)
 
-        self.brightness = 40;
+        self.brightness = 127;
         self.color = fonts.palette[self.getColor()]
 
         self.matrixController.print_string("booting", 0, 0, true, self.color, self.brightness)
@@ -64,7 +64,7 @@ class ClockfaceManager
         if tasmota.wifi()["up"] == true
             return 'white'
         else
-            return 'green'
+            return 'white' # for demo use white anyway
         end
     end
 
@@ -94,7 +94,7 @@ class ClockfaceManager
         self.currentScreenIdx = (self.currentScreenIdx + steps) % size(clockFaces)
         self.nextScreen = clockFaces[self.currentScreenIdx](self)
         self.nextScreen.render(true)
-        self.segueCtr = 8
+        self.segueCtr = self.matrixController.row_size
         var direction = steps > 0 ? 0 : 2
         self.loop_50ms = /->self.doSegue(direction)
     end
@@ -116,7 +116,7 @@ class ClockfaceManager
     def autoChangeFace()
         if self.changeCounter == 10
             self.on_button_next()
-            self.changeCounter = 1 # 0 only on boot
+            self.changeCounter = 0 # 0 only on boot
         end
         self.changeCounter += 1
     end
@@ -135,29 +135,24 @@ class ClockfaceManager
 
     def every_100ms()
         if self.segueCtr != 0 return end
-        if gpio.digital_read(14) == 0
-            self.on_button_next()
-        elif gpio.digital_read(27) == 0
-            self.on_button_action()
-        elif gpio.digital_read(26) == 0
-            self.on_button_prev()
-        end
-        # print(gpio.digital_read(14),gpio.digital_read(26),gpio.digital_read(27))
+        # if gpio.digital_read(14) == 0
+        #     self.on_button_next()
+        # elif gpio.digital_read(27) == 0
+        #     self.on_button_action()
+        # elif gpio.digital_read(26) == 0
+        #     self.on_button_prev()
+        # end
     end
 
     def redraw()
-        #var start = tasmota.millis()
-
         self.currentScreen.render()
         self.matrixController.draw()
-
-        #print("Redraw took", tasmota.millis() - start, "ms")
     end
 
     def update_brightness_from_sensor()
         import math
 
-        var illuminance = 1000
+        var illuminance = 10000
         var brightness = int(10 * math.log(illuminance))
         if brightness < 10
             brightness = 10;
@@ -168,6 +163,7 @@ class ClockfaceManager
         # print("Brightness: ", self.brightness, ", Illuminance: ", illuminance);
 
         self.brightness = brightness;
+        self.brightness = 255;
     end
 
     def save_before_restart()
