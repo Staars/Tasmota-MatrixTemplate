@@ -21,17 +21,22 @@ class SecondsScreen: BaseScreen
             for x:0..7
                 var pixel = self.img[color]<<16 | self.img[color+1]<<8 | self.img[color+2]
                 screen.set_matrix_pixel_color(x,y, pixel ,self.screenManager.brightness)
+                if x == 7 screen.set_matrix_pixel_color(8,y, pixel ,self.screenManager.brightness) end # duplicate last column in this particular use case
                 color += 3
             end
         end
     end
 
     def drawBars(screen)
+        var wd = tasmota.time_dump(tasmota.rtc()["local"])["weekday"]
         var i = 10
+        var day = 1
         while i < 30
-            screen.set_matrix_pixel_color(i,7, 0x303030 ,self.screenManager.brightness)
-            screen.set_matrix_pixel_color(i+1,7, 0x303030 ,self.screenManager.brightness)
+            var color = day == wd ? 0x909090 : 0x303030 
+            screen.set_matrix_pixel_color(i,7, color ,self.screenManager.brightness)
+            screen.set_matrix_pixel_color(i+1,7, color ,self.screenManager.brightness)
             i += 3
+            day += 1
         end
     end
 

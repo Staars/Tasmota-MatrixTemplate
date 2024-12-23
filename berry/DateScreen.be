@@ -11,7 +11,7 @@ class DateScreen: BaseScreen
 
         self.showYear = false
         self.needs_render = true
-        # self.OutBuf = bytes(-(3 * 32)) # width * RGB aka the greater of width and height
+
         self.scrollDirection = 0
         self.scrollIdx = 0
     end

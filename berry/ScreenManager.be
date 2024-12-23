@@ -38,10 +38,10 @@ class ClockfaceManager
         var matrix_width = 32
         var matrix_height = 8
 
-        self.matrixController = MatrixController(matrix_width,8,32)
-        self.offscreenController = MatrixController(matrix_width,8,1)
+        self.matrixController = MatrixController(matrix_width, matrix_height, gpio.pin(gpio.WS2812, 0))
+        self.offscreenController = MatrixController(matrix_width, matrix_height,1) # 1 is a dummy pin, that MUST not be configured for WS2812
 
-        self.brightness = 127;
+        self.brightness = 200;
         self.color = fonts.palette[self.getColor()]
 
         self.matrixController.print_string("booting", 0, 0, true, self.color, self.brightness)
@@ -92,6 +92,7 @@ class ClockfaceManager
 
     def initSegue(steps)
         self.currentScreenIdx = (self.currentScreenIdx + steps) % size(clockFaces)
+        if self.currentScreenIdx == 0 self.currentScreenIdx = 1 end # optional: show screen 0 only after reboot
         self.nextScreen = clockFaces[self.currentScreenIdx](self)
         self.nextScreen.render(true)
         self.segueCtr = self.matrixController.row_size
