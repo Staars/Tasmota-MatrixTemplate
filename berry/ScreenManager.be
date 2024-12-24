@@ -9,7 +9,7 @@ import ImgScreen
 import StartScreen
 import CalendarScreen
 
-var clockFaces = [
+var Screens = [
     StartScreen,
     CalendarScreen,
     LongTextScreen,
@@ -20,7 +20,7 @@ var clockFaces = [
     ImgScreen
 ];
 
-class ClockfaceManager
+class ScreenManager
     var matrixController, offscreenController
     var brightness
     var color
@@ -33,7 +33,7 @@ class ClockfaceManager
     def init()
         import fonts
         import gpio
-        print("ClockfaceManager Init")
+        print("ScreenManager Init")
 
         var matrix_width = 32
         var matrix_height = 8
@@ -48,7 +48,7 @@ class ClockfaceManager
         self.matrixController.draw()
 
         self.currentScreenIdx = 0
-        self.currentScreen = clockFaces[self.currentScreenIdx](self)
+        self.currentScreen = Screens[self.currentScreenIdx](self)
         self.loop_50ms = /->self.currentScreen.loop()
         self.outShiftBuffer = bytes(-(matrix_width * 3))
         self.trashBuffer = bytes(-(matrix_width * 3))
@@ -91,9 +91,9 @@ class ClockfaceManager
     end
 
     def initSegue(steps)
-        self.currentScreenIdx = (self.currentScreenIdx + steps) % size(clockFaces)
+        self.currentScreenIdx = (self.currentScreenIdx + steps) % size(Screens)
         if self.currentScreenIdx == 0 self.currentScreenIdx = 1 end # optional: show screen 0 only after reboot
-        self.nextScreen = clockFaces[self.currentScreenIdx](self)
+        self.nextScreen = Screens[self.currentScreenIdx](self)
         self.nextScreen.render(true)
         self.segueCtr = self.matrixController.row_size
         var direction = steps > 0 ? 0 : 2
@@ -114,10 +114,10 @@ class ClockfaceManager
         end
     end
 
-    def autoChangeFace()
-        if self.changeCounter == 10
+    def autoChangeScreen()
+        if self.changeCounter == self.currentScreen.duration
             self.on_button_next()
-            self.changeCounter = 0 # 0 only on boot
+            self.changeCounter = 0
         end
         self.changeCounter += 1
     end
@@ -127,7 +127,7 @@ class ClockfaceManager
         if self.segueCtr != 0 return end
         self.update_brightness_from_sensor();
         self.redraw()
-        self.autoChangeFace()
+        self.autoChangeScreen()
     end
 
     def every_50ms()
@@ -186,4 +186,4 @@ class ClockfaceManager
     end
 end
 
-return ClockfaceManager
+return ScreenManager

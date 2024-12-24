@@ -4,6 +4,7 @@ class BaseScreen
     var screenManager
     var matrixController, offscreenController
     var needs_render
+    var duration
 
     var hasValue
     var value
@@ -14,6 +15,7 @@ class BaseScreen
         self.screenManager = screenManager
         self.matrixController = screenManager.matrixController
         self.offscreenController = screenManager.offscreenController
+        self.duration = 10 # default value for auto change
     end
 
     def deinit()

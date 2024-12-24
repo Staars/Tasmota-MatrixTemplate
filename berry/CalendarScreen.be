@@ -32,7 +32,7 @@ class SecondsScreen: BaseScreen
         var i = 10
         var day = 1
         while i < 30
-            var color = day == wd ? 0x909090 : 0x303030 
+            var color = day == wd ? self.screenManager.color : 0x606060 
             screen.set_matrix_pixel_color(i,7, color ,self.screenManager.brightness)
             screen.set_matrix_pixel_color(i+1,7, color ,self.screenManager.brightness)
             i += 3

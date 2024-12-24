@@ -4,7 +4,7 @@ import BaseScreen
 import MatrixController
 
 class LongTextScreen: BaseScreen
-    var  inOutBuf, trashOutBuf
+    var trashOutBuf
     var textPosition, text
     var scrollsLeft
 
@@ -12,25 +12,24 @@ class LongTextScreen: BaseScreen
         super(self).init(screenManager);
 
         self.screenManager.change_font('Arcade');
-        self.screenManager.changeCounter = 30
 
         self.textPosition = 0
         self.text = " THIS IS A VERY LONG TEXT MESSAGE, THAT WOULD NEVER FIT ON THE SCREEN OF A ULANZI CLOCK !  "
-        # self.text = tasmota.cmd("status 4").tostring()
+        self.duration = 20 # override default, because we need more time here
         self.needs_render = true
         self.trashOutBuf = bytes(-(3 * 8)) # height * RGB
     end
 
     def loop()
         if self.needs_render == true return end
-        # var start = tasmota.millis()
+
         self.offscreenController.matrix.scroll(1, self.screenManager.outShiftBuffer) # 1 - to left, output - inOutBuf, no input buffer
         self.matrixController.matrix.scroll(1, self.trashOutBuf, self.screenManager.outShiftBuffer) # 1 - to left, unused output, input inOutBuf
         self.matrixController.leds.show();
         self.scrollsLeft -= 1
         if self.scrollsLeft > 0 return end
         self.nextChar()
-        # print("Redraw took", tasmota.millis() - start, "ms")
+
     end
 
     def nextChar()
@@ -47,8 +46,11 @@ class LongTextScreen: BaseScreen
         if self.needs_render == false return end
         var screen = segue ? self.offscreenController : self.matrixController
         screen.clear()
+
         self.nextChar()
-        if segue == true return end
+        # if segue == true
+        #     return # do nott
+        # end
         self.needs_render = false
     end
 

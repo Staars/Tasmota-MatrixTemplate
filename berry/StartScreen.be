@@ -33,7 +33,7 @@ class SecondsScreen: BaseScreen
 
         self.showImg(screen)
 
-        var hello_str = '...GO!'
+        var hello_str = '...UP!'
         var x_offset = 9
         var y_offset = 0
 
