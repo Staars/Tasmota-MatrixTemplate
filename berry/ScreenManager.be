@@ -8,16 +8,18 @@ import NetScreen
 import ImgScreen
 import StartScreen
 import CalendarScreen
+import WeatherScreen
 
 var Screens = [
     StartScreen,
+    WeatherScreen,
     CalendarScreen,
     LongTextScreen,
     DateScreen,
     BasicScreen,
     SecondsScreen,
     NetScreen,
-    ImgScreen
+    ImgScreen,
 ];
 
 class ScreenManager

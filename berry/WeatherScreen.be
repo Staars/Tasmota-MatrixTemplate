@@ -1,16 +1,25 @@
 import BaseScreen
 
-class ImgScreen: BaseScreen
+class WeatherScreen: BaseScreen
 
-    var img, img_idx
+    var img, img_idx, weather_data
 
     def init(screenManager)
         super(self).init(screenManager);
 
+        import json
         self.screenManager.change_font('MatrixDisplay3x5');
-        var f = open("red_eye.bin","r")
+        var f = open("weather.bin","r")
         self.img = f.readbytes()
         f.close()
+
+        var cl = webclient()
+        var lat = 52.477940
+        var long = 13.399330
+        cl.begin(f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={long}&current=temperature_2m")
+        cl.GET()
+        self.weather_data = json.load(cl.get_string())
+        print(self.weather_data)
         self.img_idx = 0
     end
 
@@ -41,14 +50,15 @@ class ImgScreen: BaseScreen
         screen.clear()
 
         self.showImg(screen)
-        var rtc = tasmota.rtc()
 
-        var time_str = tasmota.strftime('%H:%M', rtc['local'])
-        var x_offset = 12
+        var temperature = self.weather_data['current']['temperature_2m']
+        var time_str = format("%.1f 'C", temperature)
+        var x_offset = 10
+        if temperature < 10 x_offset += 4 end
         var y_offset = 0
 
         screen.print_string(time_str, x_offset, y_offset, true, self.screenManager.color, self.screenManager.brightness)
     end
 end
 
-return ImgScreen
+return WeatherScreen
