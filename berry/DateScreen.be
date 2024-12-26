@@ -22,13 +22,13 @@ class DateScreen: BaseScreen
 
     def loop()
         if self.needs_render == true return end
-        # var start = tasmota.millis()
+
         self.matrixController.matrix.scroll(self.scrollDirection,self.screenManager.outShiftBuffer)
         self.matrixController.leds.show();
         self.scrollIdx += 1
         if self.scrollIdx%32 == 0 self.scrollDirection += 1 end
         if self.scrollDirection > 3 self.scrollDirection = 0 end
-        # print("Redraw took", tasmota.millis() - start, "ms")
+
     end
 
 

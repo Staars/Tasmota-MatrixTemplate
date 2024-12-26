@@ -33,7 +33,7 @@ class StartScreen: BaseScreen
 
         self.showImg(screen)
 
-        var hello_str = '...UP!'
+        var hello_str = '...boot!'
         var x_offset = 9
         var y_offset = 0
 

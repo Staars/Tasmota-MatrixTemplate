@@ -14,7 +14,7 @@ class AlertScreen: BaseScreen
         self.screenManager.change_font('Arcade');
 
         self.textPosition = 0
-        self.text = "ALERT:"
+        self.text = ">>"
         self.duration = 15 # override default, because we need more time here
         var f = open("caution.bin","r")
         self.img = f.readbytes()
@@ -54,7 +54,7 @@ class AlertScreen: BaseScreen
         self.scrollsLeft = self.matrixController.font_width + 1
 
         self.offscreenController.clear()
-        self.offscreenController.print_char(self.text[self.textPosition], 0, 0, false, self.screenManager.color, self.screenManager.brightness)
+        self.offscreenController.print_char(self.text[self.textPosition], 0, 0, true, self.screenManager.color, self.screenManager.brightness)
         self.textPosition += 1
 
         if self.textPosition == (size(self.text)-1) self.textPosition = 0 end

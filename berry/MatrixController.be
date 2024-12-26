@@ -108,10 +108,9 @@ class MatrixController
         var y_offset = 7 - font_height
         for i: 0..(font_height-1)
             var code = char_bitmap[i]
-            for j: 0..7
+            for j: 0..self.font_width
                 if code & (1 << (7 - j)) != 0
                     self.set_matrix_pixel_color(x+j, y+i+y_offset, color, brightness)
-
                     if j > actual_width
                         actual_width = j
                     end

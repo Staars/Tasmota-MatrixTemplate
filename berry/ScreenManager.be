@@ -54,7 +54,7 @@ class ScreenManager
         self.currentScreenIdx = 0
         self.currentScreen = Screens[self.currentScreenIdx](self)
         self.loop_50ms = /->self.currentScreen.loop()
-        self.outShiftBuffer = bytes(-(matrix_width * 3))
+        self.outShiftBuffer = bytes(-(matrix_width * 3)) # or height, if height > width
         self.trashBuffer = bytes(-(matrix_width * 3))
         self.changeCounter = 0
         self.segueCtr = 0
@@ -167,19 +167,7 @@ class ScreenManager
     end
 
     def update_brightness_from_sensor()
-        import math
-
-        var illuminance = 10000
-        var brightness = int(10 * math.log(illuminance))
-        if brightness < 10
-            brightness = 10;
-        end
-        if brightness > 128
-            brightness = 128
-        end
-        # print("Brightness: ", self.brightness, ", Illuminance: ", illuminance);
-
-        self.brightness = brightness;
+        # use internal or external sensor/time data to adapt brightness
         self.brightness = 255;
     end
 
