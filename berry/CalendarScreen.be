@@ -1,6 +1,6 @@
 import BaseScreen
 
-class SecondsScreen: BaseScreen
+class CalendarScreen: BaseScreen
 
     var img, img_idx
 
@@ -64,4 +64,4 @@ class SecondsScreen: BaseScreen
     end
 end
 
-return SecondsScreen
+return CalendarScreen

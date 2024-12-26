@@ -52,7 +52,7 @@ class WeatherScreen: BaseScreen
         self.showImg(screen)
 
         var temperature = self.weather_data['current']['temperature_2m']
-        var time_str = format("%.1f 'C", temperature)
+        var time_str = format("%.1f C", temperature)
         var x_offset = 10
         if temperature < 10 x_offset += 4 end
         var y_offset = 0

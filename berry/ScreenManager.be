@@ -9,10 +9,11 @@ import ImgScreen
 import StartScreen
 import CalendarScreen
 import WeatherScreen
+import AlertScreen
 
 var Screens = [
-    StartScreen,
-    WeatherScreen,
+    StartScreen, # only shown once
+    # WeatherScreen,
     CalendarScreen,
     LongTextScreen,
     DateScreen,
@@ -20,6 +21,7 @@ var Screens = [
     SecondsScreen,
     NetScreen,
     ImgScreen,
+    AlertScreen, # only shown on event
 ];
 
 class ScreenManager
@@ -92,8 +94,13 @@ class ScreenManager
         self.initSegue(1)
     end
 
-    def initSegue(steps)
-        self.currentScreenIdx = (self.currentScreenIdx + steps) % size(Screens)
+    def initSegue(steps, screenIdx)
+        if screenIdx
+            self.currentScreenIdx = screenIdx # info/alert message or other override
+            print("override screen with alert")
+        else
+            self.currentScreenIdx = (self.currentScreenIdx + steps) % (size(Screens) - 1)
+        end
         if self.currentScreenIdx == 0 self.currentScreenIdx = 1 end # optional: show screen 0 only after reboot
         self.nextScreen = Screens[self.currentScreenIdx](self)
         self.nextScreen.render(true)
@@ -122,6 +129,13 @@ class ScreenManager
             self.changeCounter = 0
         end
         self.changeCounter += 1
+    end
+
+    def alert(message)
+        self.changeCounter = 0 # prevent overlapping auto change
+        self.initSegue(1,size(Screens) - 1) # last element of screens array
+        self.nextScreen.text += message
+        print(self.nextScreen.text)
     end
 
     # This will be called automatically every 1s by the tasmota framework
