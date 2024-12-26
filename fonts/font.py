@@ -69,10 +69,41 @@ def save_hex_strings_to_b64_file(hex_strings, filename):
             f.write(f"'{char}': '{base64_bytes.decode("ascii")}',\n")
         f.write("}")
 
+def save_hex_strings_to_b64_file_left_aligned(hex_strings, filename):
+    with open(filename, 'w') as f:
+        f.write("var font = {\n")
+        for char, hex_string in hex_strings.items():
+            hex_string = hex_string.split(",")
+            buf_string = ""
+            for it in hex_string:
+                buf_string += it.replace("0x","").replace(" ","")
+            b = bytes.fromhex(buf_string)
+            prop_p = bytearray()
+            leading_zeros = 8
+            print(char)
+            for line in b:
+                print(bin(line))
+                leading_zeros_line = 0
+                for i in range(7,-1,-1):
+                    if line & (1<<i) == 0:
+                        # print(line,i)
+                        leading_zeros_line += 1
+                    else:
+                        break
+                if leading_zeros_line < leading_zeros:
+                    leading_zeros = leading_zeros_line
+            if char == "":
+                leading_zeros = 0 # do not collapse white space
+            for line in b:
+                prop_p.append(line<<leading_zeros)
+            base64_bytes = base64.b64encode(prop_p)
+            f.write(f"'{char}': '{base64_bytes.decode("ascii")}',\n")
+        f.write("}")
+
 
 def main():
     point_size = 7
-    font_path = os.path.join(".", "monomin-6x5.ttf")
+    font_path = os.path.join(".", "Arcade.ttf")
     characters = [char for char in string.ascii_uppercase]
     characters += [char for char in string.ascii_lowercase]
     characters += [char for char in string.digits]
@@ -84,10 +115,10 @@ def main():
     hex_strings = generate_hex_strings(font_path, point_size, characters)
     filename = "./hex_strings.txt"
     save_hex_strings_to_file(hex_strings, filename)
-    filename = "./hex_strings_bytes.txt"
-    save_hex_strings_to_bytes_file(hex_strings, filename)
     filename = "./hex_strings_b64.txt"
     save_hex_strings_to_b64_file(hex_strings, filename)
+    filename = "./hex_strings_b64_left_aligned.txt"
+    save_hex_strings_to_b64_file_left_aligned(hex_strings, filename)
 
 
 if __name__ == "__main__":
