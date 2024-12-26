@@ -13,7 +13,7 @@ import AlertScreen
 
 var Screens = [
     StartScreen, # only shown once
-    # WeatherScreen,
+    WeatherScreen,
     CalendarScreen,
     LongTextScreen,
     DateScreen,

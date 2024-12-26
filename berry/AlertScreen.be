@@ -11,11 +11,11 @@ class AlertScreen: BaseScreen
     def init(screenManager)
         super(self).init(screenManager);
 
-        self.screenManager.change_font('Arcade');
+        self.screenManager.change_font('TinyUnicode');
 
         self.textPosition = 0
-        self.text = ">>"
-        self.duration = 15 # override default, because we need more time here
+        self.text = " >> "
+        self.duration = 20 # override default, because we need more time here
         var f = open("caution.bin","r")
         self.img = f.readbytes()
         f.close()
@@ -51,10 +51,8 @@ class AlertScreen: BaseScreen
     end
 
     def nextChar()
-        self.scrollsLeft = self.matrixController.font_width + 1
-
         self.offscreenController.clear()
-        self.offscreenController.print_char(self.text[self.textPosition], 0, 0, true, self.screenManager.color, self.screenManager.brightness)
+        self.scrollsLeft = self.offscreenController.print_char(self.text[self.textPosition], 0, 0, true, self.screenManager.color, self.screenManager.brightness) + 1
         self.textPosition += 1
 
         if self.textPosition == (size(self.text)-1) self.textPosition = 0 end

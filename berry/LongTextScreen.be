@@ -11,7 +11,7 @@ class LongTextScreen: BaseScreen
     def init(screenManager)
         super(self).init(screenManager);
 
-        self.screenManager.change_font('Arcade');
+        self.screenManager.change_font('TinyUnicode');
 
         self.textPosition = 0
         self.text = " THIS IS A VERY LONG TEXT MESSAGE, THAT WOULD NEVER FIT ON THE SCREEN OF A ULANZI CLOCK !  "
@@ -33,10 +33,9 @@ class LongTextScreen: BaseScreen
     end
 
     def nextChar()
-        self.scrollsLeft = self.matrixController.font_width + 1
 
         self.offscreenController.clear()
-        self.offscreenController.print_char(self.text[self.textPosition], 0, 0, false, self.screenManager.color, self.screenManager.brightness)
+        self.scrollsLeft = self.offscreenController.print_char(self.text[self.textPosition], 0, 0, true, self.screenManager.color, self.screenManager.brightness) + 1
         self.textPosition += 1
 
         if self.textPosition == (size(self.text)-1) self.textPosition = 0 end

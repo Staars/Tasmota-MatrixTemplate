@@ -98,6 +98,10 @@ class MatrixController
     def print_char(char, x, y, collapse, color, brightness)
         var actual_width = collapse ? -1 : self.font_width
 
+        if char == " "
+            return self.font_width - 2 # no collapse to zero
+        end
+
         if self.font.contains(char) == false
             print("Font does not contain char: ", char)
             return 0

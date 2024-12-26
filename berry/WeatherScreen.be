@@ -13,13 +13,6 @@ class WeatherScreen: BaseScreen
         self.img = f.readbytes()
         f.close()
 
-        var cl = webclient()
-        var lat = 52.477940
-        var long = 13.399330
-        cl.begin(f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={long}&current=temperature_2m")
-        cl.GET()
-        self.weather_data = json.load(cl.get_string())
-        print(self.weather_data)
         self.img_idx = 0
     end
 
@@ -51,8 +44,9 @@ class WeatherScreen: BaseScreen
 
         self.showImg(screen)
 
-        var temperature = self.weather_data['current']['temperature_2m']
-        var time_str = format("%.1f C", temperature)
+        import global
+        var temperature = global.weather_data['current']['temperature_2m']
+        var time_str = format("%.1f `C", temperature)
         var x_offset = 10
         if temperature < 10 x_offset += 4 end
         var y_offset = 0
