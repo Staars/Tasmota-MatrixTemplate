@@ -3,7 +3,7 @@ import introspect
 class BaseScreen
     var screenManager
     var matrixController, offscreenController
-    var needs_render
+    var can_render
     var duration
 
     var hasValue

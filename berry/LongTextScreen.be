@@ -16,12 +16,12 @@ class LongTextScreen: BaseScreen
         self.textPosition = 0
         self.text = " THIS IS A VERY LONG TEXT MESSAGE, THAT WOULD NEVER FIT ON THE SCREEN OF A ULANZI CLOCK !  "
         self.duration = 20 # override default, because we need more time here
-        self.needs_render = true
+        self.can_render = true
         self.trashOutBuf = bytes(-(3 * 8)) # height * RGB
     end
 
     def loop()
-        if self.needs_render == true return end
+        if self.can_render == true return end
 
         self.offscreenController.matrix.scroll(1, self.screenManager.outShiftBuffer) # 1 - to left, output - inOutBuf, no input buffer
         self.matrixController.matrix.scroll(1, self.trashOutBuf, self.screenManager.outShiftBuffer) # 1 - to left, unused output, input inOutBuf
@@ -42,7 +42,7 @@ class LongTextScreen: BaseScreen
     end
 
     def render(segue)
-        if self.needs_render == false return end
+        if self.can_render == false return end
         var screen = segue ? self.offscreenController : self.matrixController
         screen.clear()
 
@@ -50,7 +50,7 @@ class LongTextScreen: BaseScreen
         # if segue == true
         #     return # do nott
         # end
-        self.needs_render = false
+        self.can_render = false
     end
 
 end

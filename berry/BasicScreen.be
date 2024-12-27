@@ -6,7 +6,7 @@ class BasicScreen: BaseScreen
     def init(screenManager)
         super(self).init(screenManager);
 
-        self.screenManager.change_font('Mono65');
+        self.screenManager.change_font('TinyUnicode');
         self.showSecondsDots = false
     end
 

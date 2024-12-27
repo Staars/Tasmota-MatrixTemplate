@@ -20,11 +20,11 @@ class AlertScreen: BaseScreen
         self.img = f.readbytes()
         f.close()
         self.img_idx = 0
-        self.needs_render = true
+        self.can_render = true
     end
 
     def loop()
-        if self.needs_render == true return end
+        if self.can_render == true return end
 
         self.offscreenController.matrix.scroll(1, self.screenManager.outShiftBuffer) # 1 - to left, output - inOutBuf, no input buffer
         self.matrixController.matrix.scroll(1, self.screenManager.trashBuffer, self.screenManager.outShiftBuffer) # 1 - to left, unused output, input inOutBuf
@@ -38,7 +38,7 @@ class AlertScreen: BaseScreen
     def showImg(screen)
         var img_start = self.img_idx * 64 * 3
         var color = img_start
-        for tile:0..2
+        for tile:0..1
             for y:0..7
                 for x:0..7
                     var pixel = self.img[color]<<16 | self.img[color+1]<<8 | self.img[color+2]
@@ -59,7 +59,7 @@ class AlertScreen: BaseScreen
     end
 
     def render(segue)
-        if self.needs_render == false return end
+        if self.can_render == false return end
         var screen = segue ? self.offscreenController : self.matrixController
         screen.clear()
 
@@ -67,7 +67,7 @@ class AlertScreen: BaseScreen
         self.scrollsLeft = 8
 
         # self.nextChar()
-        self.needs_render = false
+        self.can_render = false
     end
 
 end

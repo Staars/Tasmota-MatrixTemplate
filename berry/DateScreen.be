@@ -7,10 +7,10 @@ class DateScreen: BaseScreen
     def init(screenManager)
         super(self).init(screenManager);
 
-        self.screenManager.change_font('Mono65');
+        self.screenManager.change_font('TinyUnicode');
 
         self.showYear = false
-        self.needs_render = true
+        self.can_render = true
 
         self.scrollDirection = 0
         self.scrollIdx = 0
@@ -21,7 +21,7 @@ class DateScreen: BaseScreen
     end
 
     def loop()
-        if self.needs_render == true return end
+        if self.can_render == true return end
 
         self.matrixController.matrix.scroll(self.scrollDirection,self.screenManager.outShiftBuffer)
         self.matrixController.leds.show();
@@ -33,7 +33,7 @@ class DateScreen: BaseScreen
 
 
     def render(segue)
-        if self.needs_render == false return end
+        if self.can_render == false return end
         var screen = segue ? self.offscreenController : self.matrixController
         screen.clear()
         var rtc = tasmota.rtc()
@@ -53,7 +53,7 @@ class DateScreen: BaseScreen
         screen.print_string(date_str, x_offset, y_offset, false, self.screenManager.color, self.screenManager.brightness)
 
         if segue == true return end
-        self.needs_render = false
+        self.can_render = false
     end
 end
 
